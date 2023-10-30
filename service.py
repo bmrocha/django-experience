@@ -28,8 +28,7 @@ def make_authorization():
     privateKey = config('PRIVATE_KEY')
     ts = 1
     md5_hash = compute_md5_hash(f'{ts}{privateKey}{publicKey}')
-    query_params = f'?ts={ts}&apikey={publicKey}&hash={md5_hash}'
-    return query_params
+    return f'?ts={ts}&apikey={publicKey}&hash={md5_hash}'
 
 
 def main(url):

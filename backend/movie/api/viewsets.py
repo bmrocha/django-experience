@@ -66,28 +66,26 @@ class CensurePermission(BasePermission):
 
         censure = obj.censure
 
-        if self.group_name in groups and censure >= self.age_user:
-            response = {
-                'message': self.message,
-                'status_code': status.HTTP_403_FORBIDDEN
-            }
-            raise DRFValidationError(response)
-        else:
+        if self.group_name not in groups or censure < self.age_user:
             return True
+        response = {
+            'message': self.message,
+            'status_code': status.HTTP_403_FORBIDDEN
+        }
+        raise DRFValidationError(response)
 
 
 class NotDeletePermission(BasePermission):
     message = 'Nenhum registro pode ser deletado.'
 
     def has_permission(self, request, view):
-        if request.method == 'DELETE':
-            response = {
-                'message': self.message,
-                'status_code': status.HTTP_403_FORBIDDEN
-            }
-            raise DRFValidationError(response)
-        else:
+        if request.method != 'DELETE':
             return True
+        response = {
+            'message': self.message,
+            'status_code': status.HTTP_403_FORBIDDEN
+        }
+        raise DRFValidationError(response)
 
 
 class MovieViewSet(viewsets.ModelViewSet):

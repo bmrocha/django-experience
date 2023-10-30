@@ -33,7 +33,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             return CustomerCreateSerializer
 
-        if self.action == 'update' or self.action == 'partial_update':
+        if self.action in ['update', 'partial_update']:
             return CustomerUpdateSerializer
 
         return CustomerSerializer
@@ -41,7 +41,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
     def is_seller(self, seller):
         if seller:
             groups_list = seller.groups.values_list('name', flat=True)
-            return True if 'Vendedor' in groups_list else False
+            return 'Vendedor' in groups_list
         return False
 
     def get_queryset(self):
@@ -91,7 +91,7 @@ class NotSellerPermission(BasePermission):
     def is_seller(self, seller):
         if seller:
             groups_list = seller.groups.values_list('name', flat=True)
-            return True if 'Vendedor' in groups_list else False
+            return 'Vendedor' in groups_list
         return False
 
     def has_permission(self, request, view):

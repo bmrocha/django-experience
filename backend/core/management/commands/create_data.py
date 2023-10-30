@@ -12,14 +12,13 @@ fake = Faker()
 
 
 def gen_digits(max_length):
-    return str(''.join(choice(string.digits) for i in range(max_length)))
+    return ''.join(choice(string.digits) for _ in range(max_length))
 
 
 def gen_email(first_name: str, last_name: str):
     first_name = slugify(first_name)
     last_name = slugify(last_name)
-    email = f'{first_name}.{last_name}@email.com'
-    return email
+    return f'{first_name}.{last_name}@email.com'
 
 
 def get_person():
@@ -36,13 +35,12 @@ def get_person():
         email=email
     )
 
-    data = dict(
+    return dict(
         user=user,
         rg=gen_digits(9),
         cpf=gen_digits(11),
         cep=gen_digits(8),
     )
-    return data
 
 
 def create_persons():

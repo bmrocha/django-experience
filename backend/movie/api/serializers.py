@@ -124,11 +124,9 @@ class MovieSerializer(serializers.ModelSerializer):
 
         if category_data:
             category, _ = Category.objects.get_or_create(**category_data)
-            movie = Movie.objects.create(category=category, **validated_data)
+            return Movie.objects.create(category=category, **validated_data)
         else:
-            movie = Movie.objects.create(**validated_data)
-
-        return movie
+            return Movie.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         """

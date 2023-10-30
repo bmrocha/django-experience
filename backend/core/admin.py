@@ -16,8 +16,7 @@ class CustomUserAdmin(UserAdmin):
 
     @admin.display(description='Grupos')
     def get_groups(self, obj):
-        groups = obj.groups.all()
-        if groups:
+        if groups := obj.groups.all():
             return ', '.join([group.name for group in groups])
 
 
