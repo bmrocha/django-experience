@@ -43,14 +43,12 @@ class StudentViewSet(viewsets.ViewSet):
         return serializer_class(*args, **kwargs)
 
     def get_queryset(self):
-        queryset = Student.objects.all()
-        return queryset
+        return Student.objects.all()
 
     def get_object(self):
         queryset = self.get_queryset()
         pk = self.kwargs.get('pk')
-        obj = get_object_or_404(queryset, pk=pk)
-        return obj
+        return get_object_or_404(queryset, pk=pk)
 
     def list(self, request):
         # queryset = Student.objects.all()
@@ -136,21 +134,14 @@ class ClassViewSet(viewsets.ModelViewSet):
         user = self.request.user
         teacher = User.objects.get(username=user)
 
-        if user is not None:
-            queryset = Class.objects.filter(teacher=teacher)
-        else:
-            queryset = Class.objects.none()
-
-        return queryset
+        return (
+            Class.objects.filter(teacher=teacher)
+            if user is not None
+            else Class.objects.none()
+        )
 
     def get_serializer_class(self):
-        if self.action == 'create':
-            return ClassAddSerializer
-
-        if self.action == 'update':
-            return ClassSerializer
-
-        return ClassSerializer
+        return ClassAddSerializer if self.action == 'create' else ClassSerializer
 
     def perform_create(self, serializer):
         '''
@@ -191,10 +182,10 @@ class ClassViewSet(viewsets.ModelViewSet):
         Método para ver os detalhes.
         '''
         instance = self.get_object()
-        teacher = instance.teacher
         user = self.request.user
 
         if user and user.is_authenticated:
+            teacher = instance.teacher
             if user == teacher:
                 serializer = self.get_serializer(instance)
             else:
